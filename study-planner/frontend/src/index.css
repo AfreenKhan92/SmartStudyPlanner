@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ink: #f8fafc;
+    --color-surface: #ffffff;
+    --color-card: #ffffff;
+    --color-border: #e2e8f0;
+    --color-muted: #94a3b8;
+    --color-ghost: #64748b;
+    --color-text: #0f172a;
+  }
+
+  .dark {
+    --color-ink: #0d0f14;
+    --color-surface: #13161e;
+    --color-card: #1a1f2e;
+    --color-border: #252b3b;
+    --color-muted: #4a5268;
+    --color-ghost: #8892a4;
+    --color-text: #e8ecf4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-ink);
+  }
+
+  ::-webkit-scrollbar       { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--color-ink); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+  body {
+    @apply bg-ink text-text font-body antialiased transition-colors duration-300;
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, h4 { @apply font-display; }
+}
+
+@layer components {
+  /* ── Buttons ─────────────────────────────────────────────────────────────── */
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-body font-medium
+           text-sm transition-all duration-200 cursor-pointer select-none;
+  }
+  .btn-primary {
+    @apply btn bg-accent text-white hover:bg-accent-dim active:scale-95 shadow-glow;
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-ghost border border-border hover:bg-surface hover:text-text;
+  }
+  .btn-danger {
+    @apply btn bg-rose/10 text-rose border border-rose/20 hover:bg-rose/20;
+  }
+
+  /* ── Cards ───────────────────────────────────────────────────────────────── */
+  .card {
+    @apply bg-card border border-border rounded-2xl shadow-card;
+  }
+  .card-hover {
+    @apply card transition-all duration-200 hover:border-accent/30 hover:shadow-glow;
+  }
+
+  /* ── Inputs ──────────────────────────────────────────────────────────────── */
+  .input {
+    @apply w-full bg-surface border border-border rounded-xl px-4 py-3
+           text-text text-sm font-body placeholder:text-muted
+           focus:outline-none focus:border-accent/60 focus:ring-2 focus:ring-accent/10
+           transition-all duration-200;
+  }
+  .input-label {
+    @apply block text-xs font-medium text-ghost uppercase tracking-wider mb-1.5;
+  }
+
+  /* ── Badges ──────────────────────────────────────────────────────────────── */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-medium;
+  }
+  .badge-blue   { @apply badge bg-accent/10 text-accent; }
+  .badge-teal   { @apply badge bg-teal/10 text-teal; }
+  .badge-amber  { @apply badge bg-amber/10 text-amber; }
+  .badge-rose   { @apply badge bg-rose/10 text-rose; }
+  .badge-green  { @apply badge bg-emerald/10 text-emerald; }
+
+  /* ── Progress bar ─────────────────────────────────────────────────────────── */
+  .progress-track {
+    @apply h-2 bg-border rounded-full overflow-hidden;
+  }
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-700 ease-out;
+    background: linear-gradient(90deg, #5b8df6, #2dd4bf);
+  }
+}
+
+/* ── Page transitions ─────────────────────────────────────────────────────── */
+.page-enter {
+  animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ── Dot pattern background ────────────────────────────────────────────────── */
+.dot-bg {
+  background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
