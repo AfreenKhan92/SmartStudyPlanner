@@ -57,7 +57,7 @@ export default function EditProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-screen bg-transparent">
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 py-10 page-enter">
         <h1 className="text-3xl font-display font-700 text-text mb-6">Edit Profile</h1>

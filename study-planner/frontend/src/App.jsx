@@ -15,6 +15,14 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        {/* Dynamic Background */}
+        <div className="ambient-bg">
+          <div className="ambient-blob blob-1"></div>
+          <div className="ambient-blob blob-2"></div>
+          <div className="ambient-blob blob-3"></div>
+        </div>
+        <div className="dot-bg"></div>
+
         <Routes>
           {/* Public */}
           <Route path="/login"  element={<Login />} />

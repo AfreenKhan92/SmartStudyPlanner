@@ -15,7 +15,7 @@ export default function Modal({ isOpen, onClose, title, children }) {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div 
-        className="absolute inset-0 bg-ink/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-[var(--color-surface)] backdrop-blur-xl backdrop-blur-sm"
         onClick={onClose}
       />
       <div className="relative w-full max-w-lg card p-6 shadow-float animate-slide-up bg-card border border-border">

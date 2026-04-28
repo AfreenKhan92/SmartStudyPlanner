@@ -97,7 +97,7 @@ export default function Progress() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-ink">
+      <div className="min-h-screen bg-transparent">
         <Navbar />
         <div className="flex justify-center py-32">
           <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin" />
@@ -108,7 +108,7 @@ export default function Progress() {
 
   if (!progress) {
     return (
-      <div className="min-h-screen bg-ink">
+      <div className="min-h-screen bg-transparent">
         <Navbar />
         <div className="max-w-lg mx-auto px-4 py-24 text-center page-enter">
           <div className="text-6xl mb-6">📊</div>
@@ -123,7 +123,7 @@ export default function Progress() {
   const { global: g, daily, subjectWise } = progress;
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-screen bg-transparent">
       <Navbar />
       <main className="max-w-6xl mx-auto px-4 py-8 page-enter">
 

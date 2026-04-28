@@ -19,7 +19,7 @@ export default function Profile() {
   const initials = (user?.name || 'U').slice(0, 2).toUpperCase();
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-screen bg-transparent">
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 py-10 page-enter">
         <h1 className="text-3xl font-display font-700 text-text mb-8">Profile</h1>
@@ -110,7 +110,7 @@ export default function Profile() {
                     <span className="text-xs text-ghost">Plan Progress</span>
                     <span className="text-xs font-mono text-text">{stats.planProgress}%</span>
                   </div>
-                  <div className="w-full h-2 bg-ink rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-[var(--color-border)] rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-accent to-teal rounded-full transition-all"
                       style={{ width: `${stats.planProgress}%` }}

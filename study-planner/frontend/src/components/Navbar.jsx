@@ -74,7 +74,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-ink/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-border bg-[var(--color-surface)] backdrop-blur-xl">
       <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
@@ -145,7 +145,7 @@ export default function Navbar() {
             </button>
 
             {notifOpen && (
-              <div className="absolute right-0 mt-2 w-80 rounded-xl border border-border bg-ink shadow-xl overflow-hidden">
+              <div className="absolute right-0 mt-2 w-80 rounded-xl border border-border bg-[var(--color-card)] shadow-xl backdrop-blur-xl overflow-hidden z-50">
                 <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                   <span className="text-sm font-medium text-text">Notifications</span>
                   {unread > 0 && (
@@ -199,7 +199,7 @@ export default function Navbar() {
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 mt-2 w-48 rounded-xl border border-border bg-ink shadow-xl overflow-hidden">
+              <div className="absolute right-0 mt-2 w-48 rounded-xl border border-border bg-[var(--color-card)] shadow-xl backdrop-blur-xl overflow-hidden z-50">
                 <Link to="/profile"      onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-ghost hover:text-text hover:bg-surface">View Profile</Link>
                 <Link to="/profile/edit" onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-ghost hover:text-text hover:bg-surface">Edit Profile</Link>
                 <Link to="/progress"     onClick={() => setMenuOpen(false)} className="block px-4 py-2.5 text-sm text-ghost hover:text-text hover:bg-surface">Progress</Link>

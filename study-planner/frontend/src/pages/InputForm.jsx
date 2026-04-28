@@ -84,7 +84,7 @@ function SubjectCard({ subject, onDelete, onAddTopic, onDeleteTopic, expanded, o
             <div className="space-y-2 mb-4">
               {subject.topics.map((topic) => (
                 <div key={topic._id}
-                  className="flex items-center justify-between gap-3 bg-ink/40 rounded-xl px-4 py-3 group"
+                  className="flex items-center justify-between gap-3 bg-[var(--color-surface)] backdrop-blur-md rounded-xl px-4 py-3 group"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span className="text-text text-sm truncate">{topic.name}</span>
@@ -108,7 +108,7 @@ function SubjectCard({ subject, onDelete, onAddTopic, onDeleteTopic, expanded, o
 
           {/* Add topic form */}
           {showForm ? (
-            <form onSubmit={handleAddTopic} className="bg-ink/40 rounded-xl p-4 space-y-3">
+            <form onSubmit={handleAddTopic} className="bg-[var(--color-surface)] backdrop-blur-md rounded-xl p-4 space-y-3">
               <div>
                 <label className="input-label">Topic Name</label>
                 <input
@@ -262,7 +262,7 @@ export default function InputForm() {
   };
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-screen bg-transparent">
       <Navbar />
 
       <main className="max-w-3xl mx-auto px-4 py-8 page-enter">

@@ -10,10 +10,14 @@ import ProgressBar from '../components/ProgressBar';
 // ─── Stat card ────────────────────────────────────────────────────────────────
 function StatCard({ label, value, sub, accent }) {
   return (
-    <div className="card p-5">
-      <p className="text-xs text-ghost font-medium uppercase tracking-wider mb-1">{label}</p>
-      <p className={`text-3xl font-display font-700 ${accent || 'text-text'}`}>{value}</p>
-      {sub && <p className="text-xs text-muted mt-1">{sub}</p>}
+    <div className="card-hover p-6 flex flex-col justify-center relative overflow-hidden group">
+      <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+        {/* Decorative circle */}
+        <div className={`w-16 h-16 rounded-full blur-xl ${accent === 'text-accent' ? 'bg-accent' : accent === 'text-teal' ? 'bg-teal' : accent === 'text-amber' ? 'bg-amber' : 'bg-muted'}`} />
+      </div>
+      <p className="text-xs text-ghost font-semibold uppercase tracking-widest mb-2 z-10">{label}</p>
+      <p className={`text-4xl font-display font-bold mb-1 z-10 ${accent || 'text-text'}`}>{value}</p>
+      {sub && <p className="text-sm text-muted font-medium z-10">{sub}</p>}
     </div>
   );
 }
@@ -30,15 +34,15 @@ function DayPill({ day, isSelected, onClick }) {
   return (
     <button
       onClick={onClick}
-      className={`flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl
-        border text-xs font-medium transition-all duration-200 min-w-[3.5rem]
+      className={`flex-shrink-0 flex flex-col items-center justify-center gap-1.5 px-4 py-3 rounded-2xl
+        border text-xs font-semibold transition-all duration-300 min-w-[4rem]
         ${isSelected
-          ? 'bg-accent border-accent text-white shadow-glow'
+          ? 'bg-gradient-to-b from-accent to-accent-dim border-transparent text-white shadow-glow translate-y-[-2px]'
           : isToday(date)
-          ? 'bg-accent/10 border-accent/30 text-accent'
+          ? 'bg-accent/10 border-accent/40 text-accent hover:bg-accent/20'
           : dayIsPast
-          ? 'bg-surface border-border text-muted'
-          : 'bg-surface border-border text-ghost hover:border-accent/30 hover:text-text'
+          ? 'bg-surface/50 border-border/50 text-muted hover:border-border'
+          : 'bg-surface border-border text-ghost hover:border-accent/40 hover:text-text hover:shadow-sm hover:translate-y-[-1px]'
         }`}
     >
       <span className="font-mono">{format(date, 'EEE')}</span>
@@ -180,7 +184,7 @@ export default function Dashboard() {
   // ── No plan state ──────────────────────────────────────────────────────────
   if (!loading && !plan) {
     return (
-      <div className="min-h-screen bg-ink">
+      <div className="min-h-screen flex flex-col">
         <Navbar />
         <div className="max-w-lg mx-auto px-4 py-24 text-center page-enter">
           <div className="text-6xl mb-6">📋</div>
@@ -197,7 +201,7 @@ export default function Dashboard() {
   // ── Loading ────────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen bg-ink">
+      <div className="min-h-screen flex flex-col">
         <Navbar />
         <div className="flex justify-center py-32">
           <div className="w-10 h-10 border-2 border-accent border-t-transparent rounded-full animate-spin" />
@@ -220,34 +224,34 @@ export default function Dashboard() {
   }) || [];
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 py-8 page-enter">
 
         {/* ── Page header ──────────────────────────────────────────────────── */}
-        <div className="flex items-start justify-between gap-4 mb-8 flex-wrap">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
           <div>
-            <h1 className="text-3xl font-display font-700 text-text mb-1">
+            <h1 className="text-4xl font-display font-bold text-text mb-2 tracking-tight">
               Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'},{' '}
-              <span className="text-accent">{user?.name?.split(' ')[0]}</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-teal">{user?.name?.split(' ')[0]}</span>
             </h1>
-            <p className="text-ghost text-sm">{plan.title}</p>
+            <p className="text-ghost text-base font-medium">{plan.title}</p>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-3 flex-wrap">
             {plan.status === 'paused' && (
-              <span className="badge-amber text-xs self-center">⏸ Paused</span>
+              <span className="badge-amber self-center px-4 py-2">⏸ Paused</span>
             )}
-            <button onClick={handleOptimizePlan} disabled={optimizing} className="btn-primary text-sm bg-purple-600 hover:bg-purple-700 border-purple-600">
+            <button onClick={handleOptimizePlan} disabled={optimizing} className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-glow hover:scale-105 transition-transform border-0">
               {optimizing ? 'Optimizing…' : '✨ AI Optimize'}
             </button>
-            <button onClick={() => handleRegeneratePlan('partial')} disabled={regen} className="btn-ghost text-sm">
+            <button onClick={() => handleRegeneratePlan('partial')} disabled={regen} className="btn-ghost">
               {regen ? '…' : '🔄 Regenerate'}
             </button>
-            <button onClick={handleDownloadPDF} disabled={downloading} className="btn-ghost text-sm">
+            <button onClick={handleDownloadPDF} disabled={downloading} className="btn-ghost">
               {downloading ? '⬇️...' : '⬇️ Export PDF'}
             </button>
-            <Link to="/planner" className="btn-ghost text-sm">Full Planner</Link>
+            <Link to="/planner" className="btn-ghost backdrop-blur-xl bg-surface/50">Full Planner →</Link>
           </div>
         </div>
 
@@ -280,7 +284,7 @@ export default function Dashboard() {
         </div>
 
         {/* ── Progress bar ─────────────────────────────────────────────────── */}
-        <div className="card p-5 mb-8">
+        <div className="card p-6 mb-10 bg-gradient-to-br from-surface to-surface/40 border-accent/20">
           <ProgressBar value={overallPct} label="Overall completion" size="lg" />
         </div>
 
@@ -288,11 +292,11 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
           {/* ── Day scroll strip + tasks ────────────────────────────────────── */}
-          <div className="lg:col-span-2 space-y-5">
+          <div className="lg:col-span-2 space-y-6">
             {/* Horizontal day scroll */}
-            <div className="card p-4">
-              <p className="text-xs text-ghost uppercase tracking-wider mb-3">Days</p>
-              <div className="flex gap-2 overflow-x-auto pb-1">
+            <div className="card p-5">
+              <p className="text-xs text-ghost font-semibold uppercase tracking-widest mb-4">Plan Timeline</p>
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
                 {plan.days.map((day) => (
                   <DayPill
                     key={day._id}
@@ -306,22 +310,22 @@ export default function Dashboard() {
 
             {/* Selected day tasks */}
             {selDay && (
-              <div className="card p-5">
-                <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
+              <div className="card p-6 min-h-[500px] flex flex-col">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
                   <div>
-                    <div className="flex items-center gap-2">
-                      <h2 className="font-display font-600 text-text">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h2 className="font-display font-bold text-2xl text-text tracking-tight">
                         {format(new Date(selDay.date), 'EEEE, MMMM d')}
                       </h2>
                       {isToday(new Date(selDay.date)) && (
-                        <span className="badge-blue animate-pulse-glow">Today</span>
+                        <span className="badge-blue animate-pulse-glow shadow-glow px-3 py-1">Today</span>
                       )}
                       {selDay.isRevisionDay && (
-                        <span className="badge-amber">Revision Day</span>
+                        <span className="badge-amber px-3 py-1">Revision Day</span>
                       )}
                     </div>
-                    <p className="text-xs text-ghost mt-1">
-                      Day {selDay.dayNumber} · {selDay.totalHours}h planned
+                    <p className="text-sm text-ghost font-medium">
+                      Day {selDay.dayNumber} <span className="mx-2 opacity-50">•</span> {selDay.totalHours}h planned
                     </p>
                   </div>
 
@@ -375,9 +379,9 @@ export default function Dashboard() {
           </div>
 
           {/* ── Sidebar: upcoming days ───────────────────────────────────────── */}
-          <div className="space-y-4">
-            <div className="card p-5">
-              <h3 className="font-display font-600 text-text mb-4">Upcoming Days</h3>
+          <div className="space-y-6">
+            <div className="card p-6">
+              <h3 className="font-display font-bold text-lg text-text mb-5 tracking-tight">Upcoming Days</h3>
               <div className="space-y-3">
                 {upcoming.slice(0, 7).map((day) => {
                   const done = day.tasks.filter((t) => t.isCompleted).length;
@@ -413,9 +417,9 @@ export default function Dashboard() {
             </div>
 
             {/* Subject breakdown */}
-            <div className="card p-5">
-              <h3 className="font-display font-600 text-text mb-4">Subjects</h3>
-              <div className="space-y-3">
+            <div className="card p-6">
+              <h3 className="font-display font-bold text-lg text-text mb-5 tracking-tight">Subject Progress</h3>
+              <div className="space-y-4">
                 {Object.values(
                   plan.days.flatMap((d) => d.tasks).reduce((acc, t) => {
                     if (!acc[t.subjectName]) {
@@ -447,9 +451,11 @@ export default function Dashboard() {
 
             {/* Insights panel */}
             {insights.length > 0 && (
-              <div className="card p-5">
-                <h3 className="font-display font-600 text-text mb-3">🧠 Insights</h3>
-                <div className="space-y-2">
+              <div className="card p-6 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-indigo-500/20">
+                <h3 className="font-display font-bold text-lg text-text mb-4 tracking-tight flex items-center gap-2">
+                  <span>🧠</span> AI Insights
+                </h3>
+                <div className="space-y-3">
                   {insights.slice(0, 3).map((ins, i) => (
                     <p key={i} className="text-xs text-ghost bg-surface rounded-xl p-3 border border-border leading-relaxed">
                       {ins}

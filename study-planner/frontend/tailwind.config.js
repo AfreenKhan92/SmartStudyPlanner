@@ -14,7 +14,7 @@ export default {
         surface: 'var(--color-surface)',
         card:    'var(--color-card)',
         border:  'var(--color-border)',
-        muted:   'var(--color-muted)',
+        muted:   'rgb(var(--color-muted) / <alpha-value>)',
         ghost:   'var(--color-ghost)',
         text:    'var(--color-text)',
         accent:  { DEFAULT: '#5b8df6', dim: '#3a6ae0' },
@@ -25,8 +25,8 @@ export default {
       },
       boxShadow: {
         glow:  '0 0 20px rgba(91,141,246,0.15)',
-        card:  '0 4px 24px rgba(0,0,0,0.4)',
-        float: '0 8px 32px rgba(0,0,0,0.5)',
+        card:  'var(--shadow-card)',
+        float: 'var(--shadow-float)',
       },
       animation: {
         'fade-in':   'fadeIn 0.4s ease-out',

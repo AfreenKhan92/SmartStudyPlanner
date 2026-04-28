@@ -45,7 +45,7 @@ function TopicItem({ topic, subjectId, onDelete, onUpdate }) {
 
   if (editing) {
     return (
-      <form onSubmit={handleSave} className="bg-ink/40 rounded-xl p-3 space-y-2">
+      <form onSubmit={handleSave} className="bg-[var(--color-surface)] backdrop-blur-md rounded-xl p-3 space-y-2">
         <input
           type="text"
           value={form.name}
@@ -84,7 +84,7 @@ function TopicItem({ topic, subjectId, onDelete, onUpdate }) {
   }
 
   return (
-    <div className="flex items-center justify-between gap-3 bg-ink/40 rounded-xl px-4 py-3 group">
+    <div className="flex items-center justify-between gap-3 bg-[var(--color-surface)] backdrop-blur-md rounded-xl px-4 py-3 group">
       <div className="flex items-center gap-3 min-w-0">
         <span className="text-text text-sm truncate">{topic.name}</span>
         <span className={DIFFICULTY_META[topic.difficulty]?.color || 'badge-blue'}>
@@ -252,7 +252,7 @@ function SubjectCard({ subject, onDelete, onUpdate, onAddTopic, onUpdateTopic, o
           )}
 
           {showForm ? (
-            <form onSubmit={handleAddTopic} className="bg-ink/40 rounded-xl p-4 space-y-3">
+            <form onSubmit={handleAddTopic} className="bg-[var(--color-surface)] backdrop-blur-md rounded-xl p-4 space-y-3">
               <div>
                 <label className="input-label">Topic Name</label>
                 <input
@@ -425,7 +425,7 @@ export default function Subjects() {
   };
 
   return (
-    <div className="min-h-screen bg-ink">
+    <div className="min-h-screen bg-transparent">
       <Navbar />
       <main className="max-w-3xl mx-auto px-4 py-8 page-enter">
         {/* Header */}

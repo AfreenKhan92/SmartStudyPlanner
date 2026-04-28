@@ -32,7 +32,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen dot-bg flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md page-enter">
 
         {/* Header */}
