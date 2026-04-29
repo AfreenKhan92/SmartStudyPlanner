@@ -44,31 +44,37 @@ function DayPill({ day, isSelected, onClick }) {
   const pct  = day.tasks.length ? Math.round((done / day.tasks.length) * 100) : 0;
   const st   = dayStatus(day);
 
-  const base = 'flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all duration-200 min-w-[3.5rem]';
-  const active = isSelected ? 'bg-accent border-accent text-white shadow-glow' : '';
-  const today  = !isSelected && isToday(date) ? 'bg-accent/10 border-accent/30 text-accent' : '';
-  const past   = !isSelected && !isToday(date) && isPast(date) ? 'bg-surface border-border text-muted' : '';
-  const future = !isSelected && isFuture(date) ? 'bg-surface border-border text-ghost hover:border-accent/30' : '';
+  const examDay = day.isExamDay;
+  const base    = 'flex-shrink-0 flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl border text-xs font-medium transition-all duration-200 min-w-[3.5rem]';
+  const active  = isSelected ? 'bg-accent border-accent text-white shadow-glow' : '';
+  const exam    = !isSelected && examDay ? 'bg-rose/10 border-rose/40 text-rose' : '';
+  const today   = !isSelected && !examDay && isToday(date) ? 'bg-accent/10 border-accent/30 text-accent' : '';
+  const past    = !isSelected && !examDay && !isToday(date) && isPast(date) ? 'bg-surface border-border text-muted' : '';
+  const future  = !isSelected && !examDay && isFuture(date) ? 'bg-surface border-border text-ghost hover:border-accent/30' : '';
 
   return (
-    <button onClick={onClick} className={`${base} ${active || today || past || future}`}>
+    <button onClick={onClick} className={`${base} ${active || exam || today || past || future}`}>
       <span className="font-mono">{format(date, 'EEE')}</span>
       <span className={`font-display font-700 text-base leading-none ${isSelected ? 'text-white' : ''}`}>
         {format(date, 'd')}
       </span>
-      {day.tasks.length > 0 && (
-        <div className={`w-6 h-1 rounded-full ${st === 'completed' ? 'bg-emerald' : 'bg-border'}`}>
-          <div
-            className="h-full rounded-full transition-all"
-            style={{ width: `${pct}%`, background: st === 'completed' ? undefined : '#5b8df6' }}
-          />
-        </div>
-      )}
+      {examDay
+        ? <span className="text-[9px] font-bold tracking-wide">EXAM</span>
+        : day.tasks.length > 0 && (
+          <div className={`w-6 h-1 rounded-full ${st === 'completed' ? 'bg-emerald' : 'bg-border'}`}>
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${pct}%`, background: st === 'completed' ? undefined : '#5b8df6' }}
+            />
+          </div>
+        )
+      }
     </button>
   );
 }
 
 // ── Main Planner Page ─────────────────────────────────────────────────────────
+
 export default function Planner() {
   const [plan,       setPlan]       = useState(null);
   const [loading,    setLoading]    = useState(true);
@@ -309,8 +315,9 @@ export default function Planner() {
                       {isToday(new Date(selDay.date)) && (
                         <span className="badge-blue animate-pulse-glow">Today</span>
                       )}
-                      {selDay.isRevisionDay && <span className="badge-amber">Revision Day</span>}
-                      {statusBadge(selSt)}
+                      {selDay.isRevisionDay   && <span className="badge-amber">📝 Revision Day</span>}
+                      {selDay.isExamDay       && <span className="badge-rose">🎯 Exam: {selDay.examSubjectName}</span>}
+                      {!selDay.isExamDay && !selDay.isRevisionDay && statusBadge(selSt)}
                     </div>
                     <p className="text-xs text-ghost mt-1">
                       Day {selDay.dayNumber} · {selDay.totalHours}h planned

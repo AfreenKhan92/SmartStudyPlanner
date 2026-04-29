@@ -61,11 +61,13 @@ taskSchema.pre('save', function (next) {
 
 // ─── Single day in the plan ───────────────────────────────────────────────────
 const daySchema = new mongoose.Schema({
-  date:          { type: Date, required: true, index: true },
-  dayNumber:     { type: Number, required: true },
-  totalHours:    { type: Number, required: true },
-  tasks:         [taskSchema],
-  isRevisionDay: { type: Boolean, default: false },
+  date:            { type: Date, required: true, index: true },
+  dayNumber:       { type: Number, required: true },
+  totalHours:      { type: Number, required: true },
+  tasks:           [taskSchema],
+  isRevisionDay:   { type: Boolean, default: false },
+  isExamDay:       { type: Boolean, default: false },
+  examSubjectName: { type: String,  default: '' },
   // Day-level status
   dayStatus: {
     type: String,
