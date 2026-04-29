@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { format, isToday, isPast } from 'date-fns';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -64,6 +64,7 @@ function DayPill({ day, isSelected, onClick }) {
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 export default function Dashboard() {
   const { user }  = useAuth();
+  const navigate  = useNavigate();
   const [plan,     setPlan]     = useState(null);
   const [loading,  setLoading]  = useState(true);
   const [selDay,   setSelDay]   = useState(null);
@@ -110,18 +111,6 @@ export default function Dashboard() {
     }
   };
 
-  const handleOptimizePlan = async () => {
-    setOptimizing(true);
-    try {
-      const { data } = await api.post('/ai/optimize');
-      alert('Plan optimized successfully! AI Suggestions:\n\n' + data.data.suggestions.join('\n'));
-      await loadPlan();
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to optimize plan.');
-    } finally {
-      setOptimizing(false);
-    }
-  };
 
   const handleDownloadPDF = async () => {
     setDownloading(true);
@@ -242,8 +231,11 @@ export default function Dashboard() {
             {plan.status === 'paused' && (
               <span className="badge-amber self-center px-4 py-2">⏸ Paused</span>
             )}
-            <button onClick={handleOptimizePlan} disabled={optimizing} className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-glow hover:scale-105 transition-transform border-0">
-              {optimizing ? 'Optimizing…' : '✨ AI Optimize'}
+            <button 
+              onClick={() => navigate('/optimize')} 
+              className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-glow hover:scale-105 transition-transform border-0"
+            >
+              ✨ AI Optimize
             </button>
             <button onClick={() => handleRegeneratePlan('partial')} disabled={regen} className="btn-ghost">
               {regen ? '…' : '🔄 Regenerate'}

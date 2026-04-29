@@ -2,21 +2,45 @@
  * aiService.js
  * AI-powered plan optimization and weak topic detection.
  *
- * Uses OpenAI if OPENAI_API_KEY is set; otherwise uses rule-based fallback
- * so the feature works even without an API key.
+ * Supports Groq (Free), Grok (xAI), and Rule-based fallback.
  */
 
 const { startOfDay } = require('./plannerService');
 
-// Lazy-load OpenAI so the app doesn't crash if the package is missing
-let openaiClient = null;
-function getOpenAI() {
-  if (!process.env.OPENAI_API_KEY) return null;
-  if (!openaiClient) {
+// Lazy-load AI client so the app doesn't crash if the package is missing
+let aiClient = null;
+let aiSource = null;
+
+function getAIClient() {
+  if (aiClient) return { client: aiClient, source: aiSource };
+
+  const groqKey = process.env.GROQ_API_KEY;
+  const xaiKey  = process.env.XAI_API_KEY;
+
+  if (!groqKey && !xaiKey) return { client: null, source: 'rule-based' };
+
+  try {
     const { OpenAI } = require('openai');
-    openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    
+    if (groqKey) {
+      aiClient = new OpenAI({ 
+        apiKey: groqKey, 
+        baseURL: 'https://api.groq.com/openai/v1' 
+      });
+      aiSource = 'groq';
+    } else {
+      aiClient = new OpenAI({ 
+        apiKey: xaiKey, 
+        baseURL: 'https://api.x.ai/v1' 
+      });
+      aiSource = 'grok';
+    }
+    
+    return { client: aiClient, source: aiSource };
+  } catch (err) {
+    console.error('[aiService] Failed to load AI client:', err.message);
+    return { client: null, source: 'rule-based' };
   }
-  return openaiClient;
 }
 
 // ─── Build a compact plan summary to send to the AI ──────────────────────────
@@ -137,13 +161,21 @@ function ruleBasedOptimize(plan) {
  */
 async function optimizePlan(plan) {
   const summary = buildPlanSummary(plan);
-  const client  = getOpenAI();
+  const { client, source } = getAIClient();
 
   if (!client) {
     // No API key — use rule-based
     const result = ruleBasedOptimize(plan);
     result.summary = summary;
     return result;
+  }
+
+  // Choose model based on source
+  let model;
+  if (source === 'groq') {
+    model = 'llama-3.3-70b-versatile';
+  } else {
+    model = process.env.XAI_MODEL || 'grok-2';
   }
 
   const prompt = `
@@ -169,7 +201,7 @@ Respond ONLY with valid JSON in this exact structure:
 
   try {
     const response = await client.chat.completions.create({
-      model:       'gpt-3.5-turbo',
+      model:       model,
       messages:    [{ role: 'user', content: prompt }],
       temperature: 0.4,
       max_tokens:  800,
@@ -189,7 +221,7 @@ Respond ONLY with valid JSON in this exact structure:
 
     return {
       optimized:                true,
-      source:                   'openai',
+      source:                   source,
       suggestions:              parsed.suggestions,
       weakSubjects:             parsed.weakSubjects || [],
       overloadedDays:           parsed.overloadedDays || [],
@@ -197,7 +229,7 @@ Respond ONLY with valid JSON in this exact structure:
       summary,
     };
   } catch (err) {
-    console.error('[aiService] OpenAI error, falling back to rule-based:', err.message);
+    console.error(`[aiService] ${source} error, falling back to rule-based:`, err.message);
     const result = ruleBasedOptimize(plan);
     result.summary = summary;
     result.aiError = err.message;

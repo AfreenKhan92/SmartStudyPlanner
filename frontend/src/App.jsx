@@ -10,6 +10,7 @@ import Subjects   from './pages/Subjects';
 import Progress   from './pages/Progress';
 import Profile    from './pages/Profile';
 import EditProfile from './pages/EditProfile';
+import Optimize   from './pages/Optimize';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/progress"    element={<ProtectedRoute><Progress /></ProtectedRoute>} />
           <Route path="/profile"     element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+          <Route path="/optimize"    element={<ProtectedRoute><Optimize /></ProtectedRoute>} />
 
           {/* Catch-all */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
