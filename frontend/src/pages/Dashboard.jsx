@@ -26,10 +26,10 @@ function StatCard({ label, value, sub, accent }) {
 function DayPill({ day, isSelected, onClick }) {
   const date = new Date(day.date);
   const done = day.tasks.filter((t) => t.isCompleted).length;
-  const pct  = day.tasks.length ? Math.round((done / day.tasks.length) * 100) : 0;
+  const pct = day.tasks.length ? Math.round((done / day.tasks.length) * 100) : 0;
 
-  const isExamDay  = false; // could flag if exam is that day
-  const dayIsPast  = isPast(date) && !isToday(date);
+  const isExamDay = false; // could flag if exam is that day
+  const dayIsPast = isPast(date) && !isToday(date);
 
   return (
     <button
@@ -39,10 +39,10 @@ function DayPill({ day, isSelected, onClick }) {
         ${isSelected
           ? 'bg-gradient-to-b from-accent to-accent-dim border-transparent text-white shadow-glow translate-y-[-2px]'
           : isToday(date)
-          ? 'bg-accent/10 border-accent/40 text-accent hover:bg-accent/20'
-          : dayIsPast
-          ? 'bg-surface/50 border-border/50 text-muted hover:border-border'
-          : 'bg-surface border-border text-ghost hover:border-accent/40 hover:text-text hover:shadow-sm hover:translate-y-[-1px]'
+            ? 'bg-accent/10 border-accent/40 text-accent hover:bg-accent/20'
+            : dayIsPast
+              ? 'bg-surface/50 border-border/50 text-muted hover:border-border'
+              : 'bg-surface border-border text-ghost hover:border-accent/40 hover:text-text hover:shadow-sm hover:translate-y-[-1px]'
         }`}
     >
       <span className="font-mono">{format(date, 'EEE')}</span>
@@ -63,14 +63,14 @@ function DayPill({ day, isSelected, onClick }) {
 
 // ─── Main Dashboard ───────────────────────────────────────────────────────────
 export default function Dashboard() {
-  const { user }  = useAuth();
-  const navigate  = useNavigate();
-  const [plan,     setPlan]     = useState(null);
-  const [loading,  setLoading]  = useState(true);
-  const [selDay,   setSelDay]   = useState(null);
-  const [filter,   setFilter]   = useState('all');
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [plan, setPlan] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selDay, setSelDay] = useState(null);
+  const [filter, setFilter] = useState('all');
   const [insights, setInsights] = useState([]);
-  const [regen,    setRegen]    = useState(false);
+  const [regen, setRegen] = useState(false);
   const [optimizing, setOptimizing] = useState(false);
   const [downloading, setDownloading] = useState(false);
 
@@ -146,9 +146,9 @@ export default function Dashboard() {
       });
       return {
         ...prev,
-        days:           updatedDays,
+        days: updatedDays,
         completedTasks: data.completedTasks,
-        totalTasks:     data.totalTasks,
+        totalTasks: data.totalTasks,
       };
     });
 
@@ -200,15 +200,15 @@ export default function Dashboard() {
   }
 
   const overallPct = plan.totalTasks ? Math.round((plan.completedTasks / plan.totalTasks) * 100) : 0;
-  const todayDay   = plan.days.find((d) => isToday(new Date(d.date)));
-  const todayPct   = todayDay?.tasks?.length
+  const todayDay = plan.days.find((d) => isToday(new Date(d.date)));
+  const todayPct = todayDay?.tasks?.length
     ? Math.round((todayDay.tasks.filter((t) => t.isCompleted).length / todayDay.tasks.length) * 100)
     : 0;
-  const upcoming   = plan.days.filter((d) => !isPast(new Date(d.date)) || isToday(new Date(d.date)));
+  const upcoming = plan.days.filter((d) => !isPast(new Date(d.date)) || isToday(new Date(d.date)));
 
   const filteredTasks = selDay?.tasks?.filter((t) => {
     if (filter === 'pending') return !t.isCompleted;
-    if (filter === 'done')    return t.isCompleted;
+    if (filter === 'done') return t.isCompleted;
     return true;
   }) || [];
 
@@ -221,18 +221,22 @@ export default function Dashboard() {
         {/* ── Page header ──────────────────────────────────────────────────── */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-10">
           <div>
-            <h1 className="text-4xl font-display font-bold text-text mb-2 tracking-tight">
-              Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'},{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-teal">{user?.name?.split(' ')[0]}</span>
+            <h1 className="text-2xl font-display font-medium text-ghost mb-1">
+              Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'},
             </h1>
+            <h2 className="text-5xl font-display font-bold text-text mb-2 tracking-tight">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-teal">
+                {user?.name?.split(' ')[0]}
+              </span>
+            </h2>
             <p className="text-ghost text-base font-medium">{plan.title}</p>
           </div>
           <div className="flex gap-3 flex-wrap">
             {plan.status === 'paused' && (
               <span className="badge-amber self-center px-4 py-2">⏸ Paused</span>
             )}
-            <button 
-              onClick={() => navigate('/optimize')} 
+            <button
+              onClick={() => navigate('/optimize')}
               className="btn bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:shadow-glow hover:scale-105 transition-transform border-0"
             >
               ✨ AI Optimize
@@ -377,7 +381,7 @@ export default function Dashboard() {
               <div className="space-y-3">
                 {upcoming.slice(0, 7).map((day) => {
                   const done = day.tasks.filter((t) => t.isCompleted).length;
-                  const pct  = day.tasks.length ? Math.round((done / day.tasks.length) * 100) : 0;
+                  const pct = day.tasks.length ? Math.round((done / day.tasks.length) * 100) : 0;
 
                   return (
                     <button

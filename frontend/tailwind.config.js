@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Syne', 'sans-serif'],
+        display: ['Outfit', 'Syne', 'sans-serif'],
         body:    ['DM Sans', 'sans-serif'],
         mono:    ['JetBrains Mono', 'monospace'],
       },
